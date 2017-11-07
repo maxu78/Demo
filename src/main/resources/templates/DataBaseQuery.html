@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>查询</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui-1.4/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui-1.4/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/css/DataBaseQuery.css">
+    <script type="text/javascript" src="/js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/jquery-easyui-1.4/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/js/DataBaseQuery.js"></script>
+
+    <style type="text/css">
+        .wsdetail {width: 100%;border-collapse: collapse;border: 1px solid #ccc;}
+        .wsdetail tbody tr.alt-row {background: #f2f7fc;}
+        .wsdetail td{line-height:20px;text-align: left;height: 18px;border: 1px solid #ccc;}
+        #operDiv {
+            margin: 0px auto;
+            width: 98%;
+            height: 80px;
+            line-height: 40px;
+            color: #087891
+        }
+        .mybtn {
+            padding: 7px 10px;
+            background: #7F70C9;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100px;
+        }
+    </style>
+</head>
+<body style="min-width: 800px;">
+<form name="queryform" id="queryform">
+    <input type="hidden" name="typeID" id="typeID" value="1"/>
+    <input type="hidden"name="addData" id="addData"/>
+    <input type="hidden"name="action" id="action"/>
+    <!-- <div class="myheadertitle"></div> -->
+    <div id="queryCon" style="height: 60px;">
+        <div style="height: 10px;"></div>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="80px" align="right">省份:&nbsp;</td>
+                <td width="160px" align="left"><input type="text" name="nodename" id="nodename" ></td>
+                <td width="80px" align="right" id="sIP">IP前缀:&nbsp;</td>
+                <td width="160px" align="left"><input type="text" name="staticpara1" id="staticpara1" ></td>
+                <td width="80px" align="right"></td>
+                <td width="80px" align="right"><a id="querybtn" class="mybtn">搜&nbsp;&nbsp;索</a></td>
+                <td width="80px" align="right"><a id="importbtn" class="mybtn">导&nbsp;&nbsp;入</a></td>
+                <td width="80px" align="right"><a id="exportbtn" class="mybtn">导&nbsp;&nbsp;出</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 查询结果 -->
+    <div id="result">
+        <table id="resultTable"></table>
+    </div>
+
+    <div id="operDiv">
+        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+                <td width="47%" align="right">
+                    <a id="addbtn" class="mybtn">新增</a>
+                </td>
+                <td width="6%" align="left"></td>
+                <td width="47%" align="left">
+                    <a id="delbtn" class="mybtn">删除</a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</form>
+
+
+<!-- 弹窗  Start-->
+<div id="dlg" class="easyui-dialog" style="width:620px;height:320px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons" cache="false">
+    <div class="ftitle"></div>
+    <form id="fm" method="post">
+        <table id="dg" border="1px" class="wsdetail" style="width:550px;height:auto">
+            <thead>
+            <tr>
+                <td style="width:180px; text-align: center">省份</td>
+                <td style="width:180px; text-align: center" id="dlg_staticpara1">前缀</td>
+                <td style="width:180px; text-align: center">
+                    <a id="add" class="easyui-linkbutton l-btn l-btn-small" onClick="javascript:appendOne()"><span>增加</span></a>
+                </td>
+            </tr>
+            </thead>
+            <tbody id="addBody"></tbody>
+        </table>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="submitAdd()" style="width:90px">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- 弹窗  End -->
+
+<!-- 弹窗  Start-->
+<div id="dlgUpdate" class="easyui-dialog" style="width:350px;height:200px;padding:10px 20px"
+     closed="true" buttons="#dlgUpdate-buttons">
+    <div class="ftitle"></div>
+    <form id="updateFm" method="post" novalidate>
+        <input id="staticdataid" name="staticdataid" type="hidden">
+        <div class="fitem" style="height: 20px;"></div>
+        <div class="fitem" style="text-align: center">
+            <label id="dlgUpdate_nodename">省份:</label>
+            <input type="text" id="nodename" name="nodename" class="easyui-textbox">
+        </div>
+        <div class="fitem" style="height: 20px;"></div>
+        <div class="fitem" style="text-align: center">
+            <label id="dlgUpdate_staticpara1">前缀:</label>
+            <input id="staticpara1" name="staticpara1" class="easyui-textbox">
+        </div>
+    </form>
+</div>
+<div id="dlgUpdate-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUpdate()" style="width:90px">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgUpdate').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- 弹窗  End -->
+
+</body>
+</html>

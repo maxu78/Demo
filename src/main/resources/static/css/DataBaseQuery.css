@@ -1,0 +1,448 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-size: 12px;
+	background: #f8f8f8
+}
+
+#queryCon {
+	margin: 0px auto;
+	width: 98%;
+	height: 80px;
+	line-height: 40px;
+	color: #087891
+}
+
+input {
+	width: 150px;
+	padding: 3px 3px;
+	border-radius: 3px;
+	border: 1px solid #9ED5FF;
+	color: #666;
+	height: 15px;
+}
+
+#result {
+	margin: 0px auto;
+	border: 1px solid #9ED5FF
+}
+table td{
+	word-spacing: keep-all;
+	white-space: nowrap;
+}
+.mybtn {
+	padding: 7px 10px;
+	background: #7F70C9;
+	color: #fff;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+}
+
+.mygridbtn {
+	padding: 3px 3px;
+	margin-left:4px;
+	background: #7A9220;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer
+}
+
+.myadiy {
+	color: #53868B;	
+}
+
+.myheadertitle{
+	padding: 13px 13px;
+	margin-left:0px;
+	background: #00B2EE;
+	color: #FFFFF0;
+	border-radius: 4px;	
+	margin-top: 5px;
+	font-family:'微软雅黑';
+}
+
+.myAdiv{
+	height: 35px;
+	line-height:33px;
+	overflow: hidden;
+	margin-top: 10px;
+}
+
+.myAdiv div{
+	padding: 0px 0px;
+	margin-left:10px;
+	margin-right:10px;
+	color: #999999;
+	border-radius: 4px;
+	width: 80px;
+	float: left;
+	text-align: center;
+	font-family:"微软雅黑";
+}
+
+.myAdiv font{
+	padding: 0px 0px;
+	margin-left:5px;
+	margin-right:0px;
+	color: #999999;
+	border-radius: 4px;
+	width: 80px;
+	float: left;
+	text-align: center;
+	font-family:"微软雅黑";
+}
+
+.myAdiv #add{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #8EAD24;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdiv #add:hover{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #23CA9E;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdiv #del{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #F77016;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdiv #del:hover{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #23CA9E;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdiv #handle{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #8EAD24;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdiv #handle:hover{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #23CA9E;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdiv #batch{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #F77016;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdiv #batch:hover{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #23CA9E;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+
+
+.myAdiv2{
+	height: 35px;
+	line-height:32px;
+	overflow: hidden;
+	margin-top: 10px;
+}
+
+.myAdiv2 div{
+	padding: 0px 0px;
+	margin-left:10px;
+	margin-right:10px;
+	color: #999999;
+	border-radius: 4px;
+	width: 80px;
+	float: left;
+	text-align: center;
+	font-family:"微软雅黑";
+}
+
+.myAdiv2 .myoper2{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #23CA9E;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+	border-style:solid; 
+	border-width:1px; 
+	border-color:#FF9933;
+}
+
+.myAdiv2 .myoper3{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: gray;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.linediv{
+	margin-top:10px;
+	border-bottom:2px solid #8B8B7A; /*画一条浅灰色实线*/
+}
+
+.myAdivright{
+	height: 35px;
+	line-height:35px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-left:40%;
+}
+.myAdivright #save{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #17ADDF;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #wsquery,#haquery{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #E6A00C;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #modify{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #17ADDF;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #DomainOpen{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #E6A00C;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdivright #RuleCfg{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #0DCBBF;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #cfgcheck{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #1E90FF;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+.myAdivright #cfgview{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #68228B;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #deploy{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #FF0000;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.myAdivright #redeploy{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:10px;
+	background: #FF0000;
+	color: #FFFFF0;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+.viewresult {
+	height:400px;
+	width:98%;
+	margin: 0px auto;
+	border: 3px solid #9E9E9E;
+	border-radius: 15px;
+	overflow: auto;
+	font-size: 12px;
+	color: #009ACD;
+	letter-spacing: 1px;
+	line-height: 20px;
+}
+
+
+.myAdivview{
+	height: 35px;
+	line-height:35px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.myAdivview div{
+	padding: 0px 0px;
+	margin-left:3px;
+	margin-right:0px;
+	background: #00FF00;
+	color: #FFFFF0;
+	border-radius: 4px;	
+	width: 90px;
+	float: left;
+	text-align: center;
+}
+.myheadertitle2{
+    -webkit-box-shadow: 0px 1px 3px #666;
+     box-shadow: 0px 1px 3px #666; 
+    border-radius: 3px;
+    margin-top: 10px;
+    background: #F4F4F4;
+}
+.myheadertitle2 h3{
+    border-bottom:1px solid #5DB2FE;
+}
+ .myheadertitle2>h3>a{
+    float:left;
+    margin-top: 7px;
+    margin-right: 5px;
+    background: url("../images/minus_press.png") 7px 7px no-repeat;
+    width:25px;
+    height: 25px;
+    display: block;
+    border:0;
+    outline: none;
+    cursor:pointer;
+ }
+ .myheadertitle2>h3 .clickToggle{
+   background: url("../images/button_pre.png") 7px 7px no-repeat; 
+}
+.content{
+    margin: 10px 10px;
+    margin-bottom: 50px;
+}
+.content h3{
+    height: 40px;
+    font-size: 13px;
+    line-height: 40px;
+    padding-left: 10px;
+    color: #666;
+}
+.content h4{
+    height: 30px;
+    font-size: 11px;
+    line-height: 30px;
+    padding-left: 10px;
+    color: #666;
+}

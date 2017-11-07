@@ -37,3 +37,5 @@ jsp文件放在/webapp/WEB-INF/page/index.jsp
 spring.mvc.view.prefix= /WEB-INF/page/
 spring.mvc.view.suffix=.jsp
 正常写controller即可(return的页面不要和其它模版命名重复)
+
+可以通过继承WebMvcConfigurerAdapter类,重写addResourceHandlers方法实现自定义配置静态资源文件
