@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript">
+        function sub(){
+            var s = $("#test").val();
+            $.ajax({
+                url: "/test/"+s,
+                data: {s: s},
+                type: "POST",
+                success: function(res){
+
+                    alert(res);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<form id="form">
+    <input type="text" name="test" id="test" />
+    <input type="button" name="btn" id="btn" onclick="sub();"/>
+</form>
+</body>
+</html>
