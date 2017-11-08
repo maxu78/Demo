@@ -43,13 +43,10 @@ function query1(){
         defaultpageSize=15;
     }
     querySize++;
-    var nodename = $("#nodename").val();
-    var staticpara1 = $("#staticpara1").val();
-    var typeID = $("#typeID").val();
-    var queryParams="nodename="+nodename+"&staticpara1="+staticpara1+"&typeID="+typeID;
-    queryParams+="&action=QueryIOTStaticDataTab&rn="+Math.random();
+    var userName = $("#userName").val();
+    var description = $("#description").val();
     $("#resultTable").datagrid({
-        url : "/oper/query?"+queryParams,
+        url : "/oper/query/?userName="+userName+"&description="+description+"&rn="+Math.random(),
         fitColumns : true,//列宽度自适应table宽度
         remoteSort : false,//禁止远程排序
 //		rownumbers : true,//显示行号
