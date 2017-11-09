@@ -1,9 +1,11 @@
 package com.mx.demo.service;
 
-import java.util.List;
+import com.github.pagehelper.PageInfo;
+import com.mx.demo.pojo.User;
+
 import java.util.Map;
 
 public interface DataBaseService {
 
-    public List<Map<String, String>> dataBaseService(Map<String, String> map) throws Exception;
+    public PageInfo<User> dataBaseService(Map<String, String> map, int pageNow, int pageSize);
 }
