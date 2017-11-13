@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class DataBaseController {
 
     Logger logger = LoggerFactory.getLogger(DataBaseController.class);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     @Autowired
     private DataBaseService dataBaseService;
@@ -56,13 +58,52 @@ public class DataBaseController {
     @ResponseBody
     public Map<String, String> update(HttpServletRequest request){
         Map<String, String> map = new HashMap<String, String>();
-        dataBaseService.updateUser();
+        Map<String, String> result = new HashMap<String, String>();
+        String id = request.getParameter("id");
+        String username = request.getParameter("username");
+        String description = request.getParameter("description");
+        map.put("id", id);
+        map.put("username", username);
+        map.put("description", description);
+        try {
+            dataBaseService.updateUser(map);
+            map.put("status", "ok");
+        }catch (Exception e){
+            map.put("status", "fail");
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
         return map;
     }
 
-//    public Map<String, String> add(HttpServletRequest request) throws Exception{
-//
-//        String addData = request.getParameter("addData");
-//
-//    }
+    @RequestMapping("/checkSame")
+    @ResponseBody
+    public Map<String, String> checkSame(HttpServletRequest request){
+        Map<String, String> result = new HashMap<String, String>();
+        String id = request.getParameter("id");
+        String username = request.getParameter("username");
+        Map<String, String> map = dataBaseService.checkSame(username);
+        if(map == null){
+            result.put("status","ok");
+        }else{
+            result.put("status", "notExist");
+        }
+        return map;
+    }
+
+    @RequestMapping("/add")
+    @ResponseBody
+    public Map<String, String> add(HttpServletRequest request){
+        Map<String, String> result = new HashMap<String, String>();
+        String addData = request.getParameter("addData");
+        try {
+            dataBaseService.addUser(addData);
+            result.put("status", "ok");
+        }catch (Exception e){
+            result.put("status", "fail");
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

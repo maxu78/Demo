@@ -147,8 +147,7 @@ function saveUpdate(){
         onSubmit: function(){
             // do some check
             // return false to prevent submit;
-            var s = check(typeID);
-            return s;
+
         },
         success:function(data){
             var res = eval('(' + data + ')');
@@ -157,7 +156,7 @@ function saveUpdate(){
             if(status.trim() == "ok"){
                 alert("修改成功");
 //				window.location.reload();
-                confirmChange(typeID, "mod");
+                confirmChange("mod");
             }
         }
     });
@@ -441,140 +440,29 @@ function confirmOne(e){
     var typeID = $("#typeID").val();
     var lines = 2;
     var tds = $(e).parent().parent().children();
-    var index = getRowIndex(e);
     //判断数据是否正确
-    if(typeID == "1" || typeID == "3"){
-        lines = 2;
-        var nodename = $(tds[0]).find("input[name=updateInfo]").val().trim();
-        var staticpara1 = $(tds[1]).find("input[name=updateInfo]").val().trim();
-        if(nodename == ""){
-            alert("请输入省份");
-            return false;
-        }
-        if(typeID == "1"){
-            if(staticpara1 == ""){
-                alert("请输入前缀");
-                return false;
-            }
-            //防止出现1.2.3.0的情况
-            if(staticpara1.charAt(staticpara1.length-1) == "0"){
-                alert("请输入正确的前缀");
-                return false;
-            }
-            if(IPFormatting(staticpara1+"255") == "Error"){
-                alert("请输入正确的前缀");
-                return false;
-            }
-        } else if(typeID == "3"){
-            if(staticpara1 == ""){
-                alert("请输入省份共享LNS");
-                return false;
-            }
-            if(IPFormatting(staticpara1) == "Error"){
-                alert("请输入正确的省份共享LNS");
-                return false;
+    var username = $(tds[0]).find("input[name=updateInfo]").val().trim();
+    var description = $(tds[1]).find("input[name=updateInfo]").val().trim();
+    if(username == ""){
+        alert("请输入名称");
+        return false;
+    }
+
+    var existFlag = "";
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: "/oper/checkSame",
+        data: {username: encodeURI(username), description: encodeURI(description), rn: Math.random()},
+        success: function(data){
+            if(data.trim() == "exist"){
+                existFlag = "ok";
             }
         }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    }else if(typeID == "2" || typeID == "4"){
-        lines = 3;
-        var nodename = $(tds[0]).find("input[name=updateInfo]").val().trim();
-        var staticpara1 = $(tds[1]).find("input[name=updateInfo]").val().trim();
-        var staticpara2 = $(tds[2]).find("input[name=updateInfo]").val().trim();
-        var staticpara1Num = ipStrToInt(staticpara1);
-        var staticpara2Num = ipStrToInt(staticpara2);
-        if(nodename == ""){
-            alert("请输入省份");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入开始地址");
-            return false;
-        }
-        if(IPFormatting(staticpara1) == "Error"){
-            alert("请输入正确的开始地址");
-            return false;
-        }
-        if(staticpara2 == ""){
-            alert("请输入结束地址");
-            return false;
-        }
-        if(IPFormatting(staticpara2) == "Error"){
-            alert("请输入正确的结束地址");
-            return false;
-        }
-        if(staticpara1Num>staticpara2Num){
-            alert("开始地址不能大于结束地址");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), staticpara2: encodeURI(staticpara2), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    } else if(typeID == "5"){
-        lines = 3;
-        var staticpara2 = $(tds[0]).find("input[name=updateInfo]").val().trim();
-        var nodename = $(tds[1]).find("input[name=updateInfo]").val().trim();
-        var staticpara1 = $(tds[2]).find("input[name=updateInfo]").val().trim();
-        if(nodename == ""){
-            alert("请输入使用省");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入号段");
-            return false;
-        }
-        if(staticpara2 == ""){
-            alert("请输入卡类型");
-            return false;
-        }
-        if(isNaN(staticpara1)){
-            alert("号段必须为正整数");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), staticpara2: encodeURI(staticpara2), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
+    });
+    if(existFlag == "ok"){
+        alert("数据已存在");
+        return false;
     }
 
     //赋值结束
@@ -597,13 +485,6 @@ function confirmOne(e){
 function cancelOne(e){
     var typeID = $("#typeID").val();
     var lines = 2;
-    if(typeID == "1" || typeID == "3"){
-        lines = 2;
-    }else if(typeID == "2" || typeID == "4"){
-        lines = 3;
-    }else if(typeID == "5"){
-        lines = 3;
-    }
     var tds = $(e).parent().parent().children();
     var countIndex = 0;
     for(var i=0; i<lines; i++){
@@ -663,9 +544,8 @@ function submitAdd(){
         addInfo = addInfo.substring(0, addInfo.length-1);
     }
     $("#addData").val(addInfo);
-    $("#action").val("AddIOTStaticDataTab");
     $('#queryform').form('submit', {
-        url: "CustomerDataBaseExec.jsp",
+        url: "/oper/add",
         onSubmit: function(){
             // do some check
             // return false to prevent submit;
@@ -677,13 +557,13 @@ function submitAdd(){
             if(status.trim() == "ok"){
                 alert("添加成功");
                 //window.location.reload();
-                confirmChange(typeID, "add");
+                confirmChange("add");
             }
         }
     });
 }
 
-function confirmChange(typeID, type){
+function confirmChange(type){
     query1();
     if(type == "add"){
         $('#dlg').dialog('close');

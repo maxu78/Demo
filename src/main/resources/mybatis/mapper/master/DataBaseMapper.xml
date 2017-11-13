@@ -14,7 +14,7 @@
         </where>
     </select>
 
-    <update id="updateUser" parameterType="java.util.">
+    <update id="updateUser" parameterType="java.util.Map">
         update user
         <trim prefix="set" suffixOverrides=",">
             <if test="username != null and username != ''">
@@ -28,4 +28,18 @@
             id = #{id}
         </where>
     </update>
+
+    <select id="checkSame" parameterType="java.lang.String" resultType="java.util.Map">
+        select id, user_name username, description from user
+        <where>
+            <if test="username != null and username != ''">
+                user_name=#{username}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="addUser" parameterType="java.util.Map">
+        insert into user(id, user_name, description) values (#{id}, #{username}, #{descrption})
+    </insert>
 </mapper>
