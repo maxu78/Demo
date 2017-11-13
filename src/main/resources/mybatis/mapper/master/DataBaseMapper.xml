@@ -6,12 +6,26 @@
         select id, user_name username, description from user
         <where>
             <if test="username != null and username !=''">
-                and username = #{username}
+                and user_name like concat('%', #{username}, '%')
             </if>
             <if test="description != null and description !=''">
-                and description = #{description}
+                and description like concat('%', #{description}, '%')
             </if>
         </where>
     </select>
 
+    <update id="updateUser" parameterType="java.util.">
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null and username != ''">
+                user_name = #{username},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 </mapper>

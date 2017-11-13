@@ -22,11 +22,15 @@ public class DataBaseServiceImpl implements DataBaseService{
     @Autowired
     private DataBaseDao dataBaseDao;
     @Override
-    public PageInfo<User> dataBaseService(Map<String, String> map, int pageNow, int pageSize){
-        Page<User> page = PageHelper.startPage(1, 2);
-        List<User> list = dataBaseDao.findByMap(map);
-        logger.info(list.toString());
-        return new PageInfo<>(list);
+    public PageInfo<Map<String, String>> dataBaseService(Map<String, String> map, int pageNow, int pageSize){
+        Page<Map<String, String>> page = PageHelper.startPage(pageNow, pageSize);
+        List<Map<String, String>> list = dataBaseDao.findByMap(map);
+        return new PageInfo<Map<String, String>>(list);
+    }
+
+    @Override
+    public void updateUser(Map<String, String> map) {
+        dataBaseDao.updateUser(map);
     }
 
 }

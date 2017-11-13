@@ -84,7 +84,7 @@
             <thead>
             <tr>
                 <td style="width:180px; text-align: center">用户名</td>
-                <td style="width:180px; text-align: center" id="dlg_staticpara1">描述</td>
+                <td style="width:180px; text-align: center" id="dlg_staticpara1">描&nbsp;&nbsp;述</td>
                 <td style="width:180px; text-align: center">
                     <a id="add" class="easyui-linkbutton l-btn l-btn-small" onClick="javascript:appendOne()"><span>增加</span></a>
                 </td>
@@ -105,16 +105,16 @@
      closed="true" buttons="#dlgUpdate-buttons">
     <div class="ftitle"></div>
     <form id="updateFm" method="post" novalidate>
-        <input id="staticdataid" name="staticdataid" type="hidden">
+        <input id="id" name="id" type="hidden">
         <div class="fitem" style="height: 20px;"></div>
         <div class="fitem" style="text-align: center">
-            <label id="dlgUpdate_nodename">省份:</label>
-            <input type="text" id="nodename" name="nodename" class="easyui-textbox">
+            <label id="dlgUpdate_username">用户名:</label>
+            <input type="text" name="username" class="easyui-textbox">
         </div>
         <div class="fitem" style="height: 20px;"></div>
         <div class="fitem" style="text-align: center">
-            <label id="dlgUpdate_staticpara1">前缀:</label>
-            <input id="staticpara1" name="staticpara1" class="easyui-textbox">
+            <label id="dlgUpdate_description">详&nbsp;&nbsp;细:</label>
+            <input name="description" class="easyui-textbox">
         </div>
     </form>
 </div>

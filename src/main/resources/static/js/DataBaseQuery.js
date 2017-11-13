@@ -20,18 +20,7 @@ $(document).keypress(function(e){
 });
 
 function query(){
-    var typeID = $("#typeID").val().trim();
-    if(typeID == 1){
-        query1();
-    } else if(typeID == 2 || typeID == 4){
-        query2();
-    } else if(typeID == 5){
-        query3();
-    } else if(typeID == 3){
-        query4();
-    } else if(typeID == 6){
-        query5();
-    }
+    query1();
 }
 //type为1
 function query1(){
@@ -46,7 +35,7 @@ function query1(){
     var userName = $("#userName").val();
     var description = $("#description").val();
     $("#resultTable").datagrid({
-        url : "/oper/query/?userName="+userName+"&description="+description+"&rn="+Math.random(),
+        url : "/oper/query/?username="+userName+"&description="+description+"&rn="+Math.random(),
         fitColumns : true,//列宽度自适应table宽度
         remoteSort : false,//禁止远程排序
 //		rownumbers : true,//显示行号
@@ -58,9 +47,9 @@ function query1(){
         border : false,
 //		height : $("#result").height(),
         columns : [ [{
-            field : 'checkboxid',
-            checkbox: true
-        },
+                field : 'checkboxid',
+                checkbox: true
+             },
             {
                 field : 'id',
                 title : 'id',
@@ -76,18 +65,13 @@ function query1(){
                 title : '详细',
                 width : '25%',
                 align : 'center',
-                formatter : function(value, row, index) {
-//				console.log(row);
-                    return "<a href='javascript:void(0);' style='TEXT-DECORATION:none;' onclick='update(\""+row.checkboxid+"\",\""+row.nodename+"\", \""+row.staticpara1+"\", \""+row.staticpara2+"\");'>修改</a>";
-                }
             },{
                 field : 'oper',
                 title : '操作',
                 width : '24%',
                 align : 'center',
                 formatter : function(value, row, index) {
-//				console.log(row);
-                    return "<a href='javascript:void(0);' style='TEXT-DECORATION:none;' onclick='update(\""+row.checkboxid+"\",\""+row.nodename+"\", \""+row.staticpara1+"\", \""+row.staticpara2+"\");'>修改</a>";
+                    return "<a href='javascript:void(0);' style='TEXT-DECORATION:none;' onclick='update(\""+row.id+"\", \""+row.username+"\", \""+row.description+"\");'>修改</a>";
                 }
             }
         ] ],
@@ -104,6 +88,15 @@ function query1(){
         loadMsg:'正在加载中...',
         onClickRow: function (rowIndex, rowData) {
             $(this).datagrid('unselectRow', rowIndex);
+        },
+        loadFilter: function(data){
+            console.log(data);
+            var value = {
+                total:data.total,
+                rows:data.list,
+            };
+            console.log(value);
+            return value;
         }
     });
     //设置分页控件
@@ -131,75 +124,26 @@ function exportExcel(){
     });
 }
 
-function update(staticdataid, nodename, staticpara1, staticpara2){
-    var typeID = $("#typeID").val().trim();
-    if(typeID == 1){
-        update1(staticdataid, nodename, staticpara1, staticpara2);
-    } else if(typeID == 2 || typeID == 4){
-        update2(staticdataid, nodename, staticpara1, staticpara2);
-    } else if(typeID == 5){
-        update3(staticdataid, nodename, staticpara1, staticpara2);
-    } else if(typeID == 3){
-        update4(staticdataid, nodename, staticpara1, staticpara2);
-    }
+function update(id, username, description){
+
+    update1(id, username, description);
+
 }
 
 //type为1
-function update1(staticdataid, nodename, staticpara1, staticpara2){
+function update1(id, username, description){
     $('#dlgUpdate').form('load',{
-        nodename: nodename,
-        staticpara1: staticpara1
+        username: username,
+        description: description
     });
     $('#dlgUpdate').dialog('open').dialog('center').dialog('setTitle', '修改');
-    $("#staticdataid").val(staticdataid);
+    $("#id").val(id);
 }
 
-//type为3
-function update4(staticdataid, nodename, staticpara1, staticpara2){
-    $('#dlgUpdate').form('load',{
-        nodename: nodename,
-        staticpara1: staticpara1
-    });
-    $('#dlgUpdate').dialog('open').dialog('center').dialog('setTitle', '修改');
-    $("#staticdataid").val(staticdataid);
-    $("#dlgUpdate_nodename").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;省份:");
-    $("#dlgUpdate_staticpara1").html("省份共享LNS:");
-}
-
-//type为2,4
-function update2(staticdataid, nodename, staticpara1, staticpara2){
-    $('#dlgUpdate1').form('load',{
-        nodename: nodename,
-        staticpara1: staticpara1,
-        staticpara2: staticpara2
-    });
-    $('#dlgUpdate1').dialog('open').dialog('center').dialog('setTitle', '修改');
-    $("#staticdataid1").val(staticdataid);
-}
-
-//type为5
-function update3(staticdataid, nodename, staticpara1, staticpara2){
-    $('#dlgUpdate2').form('load',{
-        nodename: nodename,
-        staticpara1: staticpara1,
-        staticpara2: staticpara2
-    });
-    $('#dlgUpdate2').dialog('open').dialog('center').dialog('setTitle', '修改');
-    $("#staticdataid2").val(staticdataid);
-}
 
 function saveUpdate(){
-    var typeID = $("#typeID").val();
-    var formID = "";
-    if(typeID == 1 || typeID == 3){
-        formID = "updateFm";
-    }else if(typeID == 2 || typeID == 4){
-        formID = "updateFm1";
-    }else if(typeID == 5){
-        formID = "updateFm2";
-    }
-    $('#'+formID).form('submit', {
-        url: "CustomerDataBaseExec.jsp?action=UpdateIOTStaticDataTab&typeID="+typeID,
+    $('#updateFm').form('submit', {
+        url: "/oper/update",
         onSubmit: function(){
             // do some check
             // return false to prevent submit;

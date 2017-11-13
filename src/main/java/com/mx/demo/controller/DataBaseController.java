@@ -33,7 +33,7 @@ public class DataBaseController {
 
     @RequestMapping("/query")
     @ResponseBody
-    public PageInfo<User> query(HttpServletRequest request) throws Exception{
+    public PageInfo<Map<String, String>> query(HttpServletRequest request) throws Exception{
         String username = request.getParameter("username");
         String description = request.getParameter("description");
         String pageNow = request.getParameter("page");
@@ -50,6 +50,14 @@ public class DataBaseController {
         map.put("username", username);
         map.put("description", description);
         return dataBaseService.dataBaseService(map, pageNowNum, pageSizeNum);
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public Map<String, String> update(HttpServletRequest request){
+        Map<String, String> map = new HashMap<String, String>();
+        dataBaseService.updateUser();
+        return map;
     }
 
 //    public Map<String, String> add(HttpServletRequest request) throws Exception{

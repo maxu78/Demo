@@ -7,5 +7,7 @@ import java.util.Map;
 
 public interface DataBaseService {
 
-    public PageInfo<User> dataBaseService(Map<String, String> map, int pageNow, int pageSize);
+    public PageInfo<Map<String, String>> dataBaseService(Map<String, String> map, int pageNow, int pageSize);
+
+    public void updateUser(Map<String, String> map);
 }

@@ -7,5 +7,7 @@ import java.util.Map;
 
 public interface DataBaseDao {
 
-    public List<User> findByMap(Map<String, String> map);
+    public List<Map<String, String>> findByMap(Map<String, String> map);
+
+    public void updateUser(Map<String, String> map);
 }
