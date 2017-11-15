@@ -3,7 +3,7 @@
 <mapper namespace="com.mx.demo.dao.masterDao.DataBaseDao">
 
     <select id="findByMap" resultType="java.util.Map" parameterType="java.util.Map">
-        select id, user_name username, description from user
+        select id checkboxid, id, user_name username, description from user
         <where>
             <if test="username != null and username !=''">
                 and user_name like concat('%', #{username}, '%')
@@ -42,4 +42,11 @@
     <insert id="addUser" parameterType="java.util.Map">
         insert into user(id, user_name, description) values (#{id}, #{username}, #{descrption})
     </insert>
+
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from user where id in
+        <foreach collection="list" item="idList" open="(" separator="," close=")">
+            #{idList}
+        </foreach>
+    </delete>
 </mapper>

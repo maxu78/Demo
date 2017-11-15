@@ -60,7 +60,7 @@
 
 
     <contextName>xcloud-print</contextName>
-    <property name="LOG_PATH" value="c://xcloud-print-logs" />
+    <property name="LOG_PATH" value="d://xcloud-print-logs" />
     <!--设置系统日志目录-->
     <property name="APPDIR" value="logs" />
 

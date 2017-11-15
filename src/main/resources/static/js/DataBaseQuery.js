@@ -1,7 +1,4 @@
 var querySize=0;
-var appendTimes=0;
-var delFlag = "";
-var okFlag = "";
 $(function(){
 //	setReSise();
     $("#querybtn").click(query);
@@ -71,7 +68,11 @@ function query1(){
                 width : '24%',
                 align : 'center',
                 formatter : function(value, row, index) {
-                    return "<a href='javascript:void(0);' style='TEXT-DECORATION:none;' onclick='update(\""+row.id+"\", \""+row.username+"\", \""+row.description+"\");'>修改</a>";
+                    var id = row.id == undefined ? "" : row.id;
+                    var username = row.username == undefined ? "" : row.username;
+                    var description = row.description == undefined ? "" : row.description;
+
+                    return "<a href='javascript:void(0);' style='TEXT-DECORATION:none;' onclick='update(\""+id+"\", \""+username+"\", \""+description+"\");'>修改</a>";
                 }
             }
         ] ],
@@ -109,17 +110,15 @@ function query1(){
 }
 
 function exportExcel(){
-    var tac = $("#tac").val();
-    var nodename = $("#nodename").val();
-    var staticpara1 = $("#staticpara1").val();
-    var typeID = $("#typeID").val();
-    var paras = "&typeID="+typeID+"&nodename="+nodename+"&staticpara1="+staticpara1+"&tac="+tac;
+    var username = $("#username").val();
+    var description = $("#description").val();
     $.ajax({
         type: "POST",
-        url: "CustomerDataBaseExec.jsp?action=ExportExcel"+paras,
-        dataType: "text",
+        url: "/oper/exportExcel",
+        data: {username: username, description: description, rn: Math.random()},
+        dataType: "json",
         success: function(data){
-            window.open("exportExcel.jsp?path="+data.trim(),"exportwin");
+
         }
     });
 }
@@ -163,170 +162,8 @@ function saveUpdate(){
 
 }
 
-function check(typeID){
-    if(typeID == 1){
-        var nodename = $("#updateFm input[name=nodename]").val().trim();
-        var staticpara1 = $("#updateFm input[name=staticpara1]").val().trim();
-        if(nodename == ""){
-            alert("请输入省份");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入前缀");
-            return false;
-        }
-        //防止出现1.2.3.0的情况
-        if(staticpara1.charAt(staticpara1.length-1) == "0"){
-            alert("请输入正确的前缀");
-            return false;
-        }
-        if(IPFormatting(staticpara1+"255") == "Error"){
-            alert("请输入正确的前缀");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    } else if(typeID == 3){
-        var nodename = $("#updateFm input[name=nodename]").val().trim();
-        var staticpara1 = $("#updateFm input[name=staticpara1]").val().trim();
-        if(nodename == ""){
-            alert("请输入省份");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入省份共享LNS IP");
-            return false;
-        }
-        if(IPFormatting(staticpara1) == "Error"){
-            alert("请输入正确的省份共享LNS IP");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    } else if(typeID == 2 || typeID == 4){
-        var nodename = $("#updateFm1 input[name=nodename]").val().trim();
-        var staticpara1 = $("#updateFm1 input[name=staticpara1]").val().trim();
-        var staticpara2 = $("#updateFm1 input[name=staticpara2]").val().trim();
-        var staticpara1Int = ipStrToInt(staticpara1);
-        var staticpara2Int = ipStrToInt(staticpara2);
-        if(nodename == ""){
-            alert("请输入省份");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入开始地址");
-            return false;
-        }
-        if(IPFormatting(staticpara1) == "Error"){
-            alert("请输入正确的开始地址");
-            return false;
-        }
-        if(staticpara2 == ""){
-            alert("请输入结束地址");
-            return false;
-        }
-        if(IPFormatting(staticpara2) == "Error"){
-            alert("请输入正确的结束地址");
-            return false;
-        }
-        if(staticpara1Int>staticpara2Int){
-            alert("开始地址不能大于结束地址");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), staticpara2: encodeURI(staticpara2), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    } else if(typeID == 5){
-        var nodename = $("#updateFm2 input[name=nodename]").val().trim();
-        var staticpara1 = $("#updateFm2 input[name=staticpara1]").val().trim();
-        var staticpara2 = $("#updateFm2 input[name=staticpara2]").val().trim();
-        if(nodename == ""){
-            alert("请输入使用省");
-            return false;
-        }
-        if(staticpara1 == ""){
-            alert("请输入号段");
-            return false;
-        }
-        if(staticpara2 == ""){
-            alert("请输入卡类型");
-            return false;
-        }
-        if(isNaN(staticpara1)){
-            alert("号段必须为正整数");
-            return false;
-        }
-        var existFlag = "";
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: "CustomerDataBaseExec.jsp",
-            data: {action: "checkSame", nodename: encodeURI(nodename), staticpara1: encodeURI(staticpara1), staticpara2: encodeURI(staticpara2), typeID: typeID, rn: Math.random()},
-            success: function(data){
-                if(data.trim() == "exist"){
-                    existFlag = "ok";
-                }
-            }
-        });
-        if(existFlag == "ok"){
-            alert("数据已存在");
-            return false;
-        }
-    }
-    return true;
-}
-
 function add(){
-    var typeID = $("#typeID").val();
-    if(typeID == "1" || typeID == "3"){
-        window.open("CustomerDataBaseBatchAddOne.jsp?typeID="+typeID);
-    } else if(typeID == "2" || typeID == "4"){
-        window.open("CustomerDataBaseBatchAddTwo.jsp?typeID="+typeID);
-    } else if(typeID == "5"){
-        window.open("CustomerDataBaseBatchAddThree.jsp?typeID="+typeID);
-    }
-
+    window.open("CustomerDataBaseBatchAddOne.jsp");
 }
 
 function del(){
@@ -347,10 +184,10 @@ function del(){
         if(r){
             $.ajax({
                 type: "POST",
-                url: "CustomerDataBaseExec.jsp",
-                data: {action: "DelBatch", ids: ids, rn: Math.random()},
+                url: "/oper/delete",
+                data: {ids: ids, rn: Math.random()},
                 success: function(data){
-                    if(data.trim() == "ok"){
+                    if(data.status == "ok"){
                         query();
                     }
                 }
@@ -414,15 +251,7 @@ function appendOne(){
 
 
 function updateOne(e){
-    var typeID = $("#typeID").val();
     var lines = 2;
-    if(typeID == "1" || typeID == "3"){
-        lines = 2;
-    }else if(typeID == "2" || typeID == "4"){
-        lines = 3;
-    }else if(typeID == "5"){
-        lines = 3;
-    }
     var tds = $(e).parent().parent().children();
     for(var i=0; i<lines; i++){
         var bakValue = $(tds[i]).find("input[type=hidden]").val();
@@ -437,7 +266,6 @@ function updateOne(e){
 }
 
 function confirmOne(e){
-    var typeID = $("#typeID").val();
     var lines = 2;
     var tds = $(e).parent().parent().children();
     //判断数据是否正确
@@ -483,7 +311,6 @@ function confirmOne(e){
     $(tds[lines]).append("<a name='del' class='mygridbtn' onClick='javascript:deleteOne(this)'><span>删除</span></a>");
 }
 function cancelOne(e){
-    var typeID = $("#typeID").val();
     var lines = 2;
     var tds = $(e).parent().parent().children();
     var countIndex = 0;
@@ -519,7 +346,6 @@ function deleteOne(e){
 }
 
 function submitAdd(){
-    var typeID = $("#typeID").val();
     var addInfo = "";
     var trs = $("#addBody").children();
     if($("#dg").find("input[type=text]").length > 0){

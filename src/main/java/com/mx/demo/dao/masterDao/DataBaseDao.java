@@ -16,4 +16,6 @@ public interface DataBaseDao {
     public Map<String, String> checkSame(@Param("username") String username);
 
     public void addUser(Map<String, String> map);
+
+    public void deleteUser(List<String> list);
 }
