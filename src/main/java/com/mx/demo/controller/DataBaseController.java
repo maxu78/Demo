@@ -3,6 +3,7 @@ package com.mx.demo.controller;
 import com.github.pagehelper.PageInfo;
 import com.mx.demo.pojo.User;
 import com.mx.demo.service.DataBaseService;
+import com.mx.demo.util.FileUtil;
 import com.mx.demo.util.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,8 +134,8 @@ public class DataBaseController {
 
     @RequestMapping("/exportExcel")
     @ResponseBody
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response){
-        String outPath = "D://excel/User.xls";
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String outPath = "C://excel/User.xls";
         BufferedInputStream bis = null;
         OutputStream os = null;
         Map<String, String> result = new HashMap<String, String>();
@@ -143,33 +144,9 @@ public class DataBaseController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("username", username);
         map.put("description", description);
-        try {
-            dataBaseService.exportExcel(map, outPath);
+        dataBaseService.exportExcel(map, outPath);
 
-            //下载
-            response.setHeader("content-type", "application/octet-stream");
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment;filename=" + outPath);
-            byte[] buff = new byte[1024];
-            os = response.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(new File(outPath)));
-            int i = bis.read(buff);
-            while (i != -1) {
-                os.write(buff, 0, buff.length);
-                os.flush();
-                i = bis.read(buff);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        FileUtil util = new FileUtil();
+        util.getDownload(outPath, request, response);
     }
 }

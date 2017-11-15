@@ -110,17 +110,9 @@ function query1(){
 }
 
 function exportExcel(){
-    var username = $("#username").val();
+    var username = $("#userName").val();
     var description = $("#description").val();
-    $.ajax({
-        type: "POST",
-        url: "/oper/exportExcel",
-        data: {username: username, description: description, rn: Math.random()},
-        dataType: "json",
-        success: function(data){
-
-        }
-    });
+    window.open("/oper/exportExcel?username="+username+"&description="+description+"&rn="+Math.random());
 }
 
 function update(id, username, description){

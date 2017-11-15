@@ -40,7 +40,7 @@
     </select>
 
     <insert id="addUser" parameterType="java.util.Map">
-        insert into user(id, user_name, description) values (#{id}, #{username}, #{descrption})
+        insert into user(id, user_name, description) values (#{id}, #{username}, #{description})
     </insert>
 
     <delete id="deleteUser" parameterType="java.lang.String">
