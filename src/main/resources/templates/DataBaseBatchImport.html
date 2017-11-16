@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>批量导入</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui-1.4/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui-1.4/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/css/DataBaseBatchImport.css">
+    <script type="text/javascript" src="/js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/jquery-easyui-1.4/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/js/ajaxfileupload.js"></script>
+    <script type="text/javascript" src="/js/DataBaseBatchImport.js"></script>
+
+    <style type="text/css">
+        .wsdetail {width: 100%;border-collapse: collapse;border: 1px solid #ccc;}
+        .wsdetail thead td {font-size: 12px;color: #333333;text-align: center;border: 0px solid #ccc; font-weight:bold;}
+        .wsdetail tbody tr {background: #fff;font-size: 12px;color: #666666;}
+        .wsdetail tbody tr.alt-row {background: #f2f7fc;}
+        .wsdetail td{line-height:20px;text-align: center;padding:4px 10px 3px 10px;height: 18px;border: 1px solid #ccc;}
+    </style>
+</head>
+<body style="min-width: 1210px;">
+<form name="queryform" id="queryform">
+    <div class="myheadertitle" id="BatchImport">批量导入</div>
+    <div class="myAdiv">
+        <div>导入时间: </div><span id="ImportTime"></span>
+    </div>
+    <div class="myAdiv">
+        <div>导入帐号: </div><span id="operUser"></span>
+    </div>
+
+    <div style="display: none;height:310px;width:98%;margin: 10px auto;	border: 3px solid #9E9E9E;	border-radius: 15px;overflow: auto;	font-size: 12px;color: #009ACD;letter-spacing: 1px;	line-height: 20px;" id="batchTaskDiv">
+        <div class="myAdiv2" style="margin-bottom: 10px;">
+            <div style="width:300px;">
+                <input style="height: 25px;width: 250px;" type="file" name="batchimportfile" id="batchimportfile" />
+            </div>
+            <div style="cursor: pointer;color: #FFFFF0;background-color: #63B8FF" onclick="importTask()">上传</div>
+            <div style="cursor: pointer;color: #FFFFF0;background-color: #CD6600" onclick="downloadFile()">模板下载</div>
+        </div>
+
+        <div style="width:100%;" id="batchTaskDivHead">
+            <table class="wsdetail">
+                <thead>
+                <tr>
+                    <td width="9%">序号</td>
+                    <td width="9%">名称</td>
+                    <td width="9%">详细</td>
+                    <td width="9%">解析结果</td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div style="height:220px;width:100%;border-radius: 15px;overflow: auto;	font-size: 12px;color: #009ACD;letter-spacing: 1px;	line-height: 20px;" id="batchTaskDivBody">
+            <table class="wsdetail" id="BatchTaskTable">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="linediv"></div>
+    <div class="myAdivright">
+        <a id="save">导入</a>
+        <a id="haquery">取消</a>
+    </div>
+</form>
+</body>
+</html>

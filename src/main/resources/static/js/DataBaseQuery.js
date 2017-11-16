@@ -155,7 +155,7 @@ function saveUpdate(){
 }
 
 function add(){
-    window.open("CustomerDataBaseBatchAddOne.jsp");
+    window.open("/oper/batchImport");
 }
 
 function del(){

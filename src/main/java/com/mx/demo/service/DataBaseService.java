@@ -19,5 +19,9 @@ public interface DataBaseService {
 
     public void deleteUser(List<String> list);
 
-    public void exportExcel(Map<String, String> map, String outPath) throws IOException;
+    public void exportExcel(Map<String, String> map, String outPath);
+
+    public List<Map<String, String>> checkExcel(String path);
+
+    public void batchAdd(List<Map<String, String>> list) throws Exception;
 }

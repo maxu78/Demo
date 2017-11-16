@@ -8,18 +8,20 @@ import com.mx.demo.util.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/oper")
@@ -28,13 +30,23 @@ public class DataBaseController {
     Logger logger = LoggerFactory.getLogger(DataBaseController.class);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
+    private String uploadPath = "/upload/";
+
+    private String downloadPath = "/download/";
+
+    private String modelPath = "/model/";
+
     @Autowired
     private DataBaseService dataBaseService;
 
     @RequestMapping("/index")
     public String toIndex(){
-        System.out.println("index...");
         return "DataBaseQuery";
+    }
+
+    @RequestMapping("/batchImport")
+    public String toBatchAdd(){
+        return "DataBaseBatchImport";
     }
 
     @RequestMapping("/query")
@@ -135,10 +147,7 @@ public class DataBaseController {
     @RequestMapping("/exportExcel")
     @ResponseBody
     public void exportExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String outPath = "C://excel/User.xls";
-        BufferedInputStream bis = null;
-        OutputStream os = null;
-        Map<String, String> result = new HashMap<String, String>();
+        String outPath = downloadPath+"User.xls";
         String username = request.getParameter("username");
         String description = request.getParameter("description");
         Map<String, String> map = new HashMap<String, String>();
@@ -148,5 +157,46 @@ public class DataBaseController {
 
         FileUtil util = new FileUtil();
         util.getDownload(outPath, request, response);
+    }
+
+    @RequestMapping("/upload")
+    @ResponseBody
+    public List<Map<String, String>> upLoadFile(MultipartHttpServletRequest request){
+        String inputName = "batchimportfile";
+        logger.info(request.getParameter(inputName));
+        Date now = new Date();
+        String fileName = sdf.format(now);
+        FileUtil util = new FileUtil();
+        String filePath = util.singleUploadFile(request, inputName, uploadPath, fileName);
+
+        //读取excel文件
+        List<Map<String, String>> result = dataBaseService.checkExcel(filePath);
+        //放到session中
+        HttpSession session = request.getSession();
+        session.setAttribute("batchImportList", result);
+        return result;
+    }
+
+    @RequestMapping("/batchAdd")
+    @ResponseBody
+    public Map<String, String> batchAdd(HttpServletRequest request){
+        String status = "ok";
+        Map<String, String> map = new HashMap<String, String>();
+        HttpSession session = request.getSession();
+        List<Map<String, String>> list = (List<Map<String, String>>) session.getAttribute("batchImportList");
+        try{
+            dataBaseService.batchAdd(list);
+            session.removeAttribute("batchImportList");
+        } catch (Exception e){
+            e.printStackTrace();
+            status = "fail";
+        }
+        map.put("status", status);
+        return map;
+    }
+
+    public void downModel(HttpServletRequest request, HttpServletResponse response){
+        FileUtil util = new FileUtil();
+        util.getDownload(modelPath, request, response);
     }
 }

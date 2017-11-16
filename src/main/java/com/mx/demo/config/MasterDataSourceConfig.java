@@ -50,12 +50,6 @@ public class MasterDataSourceConfig {
     @Value("${master.datasource.druidPassword}")
     private String druidPassword;
 
-    @Value("${pagehelper.offsetAsPageNum}")
-    private String offsetAsPageNum;
-
-    @Value("${pagehelper.helperDialect}")
-    private String helperDialect;
-
     @Bean(name = "masterDataSource")
     @Primary
     public DataSource masterDataSource(){

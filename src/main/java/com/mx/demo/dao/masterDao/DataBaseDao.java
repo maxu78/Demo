@@ -18,4 +18,6 @@ public interface DataBaseDao {
     public void addUser(Map<String, String> map);
 
     public void deleteUser(List<String> list);
+
+    public void batchAdd(List<Map<String, String>> list);
 }

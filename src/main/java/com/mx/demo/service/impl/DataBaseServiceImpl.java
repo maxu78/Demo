@@ -12,17 +12,20 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
+
+import static javax.xml.bind.JAXBIntrospector.getValue;
 
 @Service
 public class DataBaseServiceImpl implements DataBaseService{
@@ -31,6 +34,7 @@ public class DataBaseServiceImpl implements DataBaseService{
 
     @Autowired
     private DataBaseDao dataBaseDao;
+
     @Override
     public PageInfo<Map<String, String>> dataBaseService(Map<String, String> map, int pageNow, int pageSize){
         Page<Map<String, String>> page = PageHelper.startPage(pageNow, pageSize);
@@ -81,7 +85,7 @@ public class DataBaseServiceImpl implements DataBaseService{
     }
 
     @Override
-    public void exportExcel(Map<String, String> map, String outPath) throws IOException {
+    public void exportExcel(Map<String, String> map, String outPath){
         List<Map<String, String>> list = queryAllUser(map);
         List<String> title = new ArrayList<String>();
         title.add("ID");
@@ -95,9 +99,11 @@ public class DataBaseServiceImpl implements DataBaseService{
             userList.add(m.get("description") == null ? "" : m.get("description"));
             body.add(userList);
         }
-        makeExcel(title, body, outPath);
-        //下载
-
+        try {
+            makeExcel(title, body, outPath);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -144,4 +150,89 @@ public class DataBaseServiceImpl implements DataBaseService{
         logger.info("数据导出成功");
     }
 
+    public List<Map<String, String>> checkExcel(String path){
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        try {
+            List<Map<String, String>> list = readExcel(path);
+            if(list == null){
+                logger.error("文件读取错误");
+                throw new Exception("文件读取错误");
+            }
+            //校验
+            for(int i=0; i<list.size(); i++){
+                Map<String, String> map = list.get(i);
+                String username = map.get("username");
+                map.put("seq", String.valueOf(i+1));
+                map.put("status", "成功");
+                if(username == null || "".equals(username)){
+                    map.put("status", "名称不能为空");
+                }
+                result.add(map);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public void batchAdd(List<Map<String, String>> list) throws Exception{
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        for(int i=0; i<list.size(); i++){
+            Map<String, String> map = list.get(i);
+            if("成功".equals(map.get("status"))){
+                String id = UUID.randomUUID().toString();
+                map.put("id", id);
+                result.add(map);
+            }
+        }
+        //批量导入
+        dataBaseDao.batchAdd(result);
+    }
+
+    public List<Map<String, String>> readExcel(String path) throws IOException {
+        logger.info(path);
+        InputStream is = new FileInputStream(path);
+        Workbook wb = null;
+        String fileName = path.substring(path.lastIndexOf("/")+1);
+        String type = fileName.substring(fileName.indexOf('.') + 1);
+        logger.info("文件类型:"+type);
+        if("xls".equals(type)){
+            wb = new HSSFWorkbook(is);
+        }
+        if("xlsx".equals(type)){
+            wb = new XSSFWorkbook(is);
+        }
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        // Read the Sheet
+        for (int numSheet = 0; numSheet < wb.getNumberOfSheets(); numSheet++) {
+            Sheet sheet = wb.getSheetAt(numSheet);
+            if (sheet == null) {
+                continue;
+            }
+            // Read the Row
+            for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+                Row row = sheet.getRow(rowNum);
+                if (row != null) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    Cell username = row.getCell(0);
+                    Cell description = row.getCell(1);
+                    map.put("username", getValue(username));
+                    map.put("description", getValue(description));
+                    list.add(map);
+                }
+            }
+        }
+        return list;
+    }
+
+    private String getValue(Cell cell) {
+        if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
+            return String.valueOf(cell.getBooleanCellValue());
+        } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            return String.valueOf(cell.getNumericCellValue());
+        } else {
+            return String.valueOf(cell.getStringCellValue());
+        }
+    }
 }

@@ -49,4 +49,12 @@
             #{idList}
         </foreach>
     </delete>
+
+    <insert id="batchAdd" parameterType="java.util.Map">
+        insert into user (id, user_name, description) values 
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.username}, #{item.description})
+        </foreach>
+    </insert>
+
 </mapper>
