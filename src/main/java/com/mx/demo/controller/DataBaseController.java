@@ -195,8 +195,15 @@ public class DataBaseController {
         return map;
     }
 
+    @RequestMapping("/downModel")
+    @ResponseBody
     public void downModel(HttpServletRequest request, HttpServletResponse response){
         FileUtil util = new FileUtil();
-        util.getDownload(modelPath, request, response);
+        String fileName = request.getParameter("fileName");
+        try {
+            util.getDownload(modelPath + fileName, request, response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

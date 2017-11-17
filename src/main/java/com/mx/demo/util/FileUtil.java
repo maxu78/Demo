@@ -2,6 +2,7 @@ package com.mx.demo.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -9,18 +10,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class FileUtil {
 
     private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
-    public void getDownload(String fullPath, HttpServletRequest request, HttpServletResponse response) {
+    public void getDownload(String fullPath, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
         // Get your file stream from wherever.
         File downloadFile = new File(fullPath);
-        judgeDirExists(getFilePath(fullPath));
         ServletContext context = request.getServletContext();
 
         // get MIME type of the file
@@ -36,10 +38,16 @@ public class FileUtil {
         response.setContentType(mimeType);
         response.setContentLength((int) downloadFile.length());
 
+        String filename =  downloadFile.getName();
+        if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) {
+            filename = URLEncoder.encode(filename, "UTF-8");
+        } else {
+            filename = new String(filename.getBytes("UTF-8"), "ISO8859-1");
+        }
+
         // set headers for the response
         String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"",
-                downloadFile.getName());
+        String headerValue = String.format("attachment; filename=\"%s\"", filename);
         response.setHeader(headerKey, headerValue);
 
         // Copy the stream to the response's output stream.
@@ -204,11 +212,14 @@ public class FileUtil {
 
     //根据路径+文件名分离出路径
     public static String getFilePath(String fullPath){
-        String filePath = fullPath.substring(0, fullPath.lastIndexOf('\\') + 1);
+        String filePath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
         return filePath;
     }
 
+
+
     public static void main(String[] args){
-        judgeFileExists("E://down/abc/abc.txt");
+        System.out.println(getFilePath("E://down/abc/abc.txt"));
+        //judgeFileExists("E://down/abc/abc.txt");
     }
 }

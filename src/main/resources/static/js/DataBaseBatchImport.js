@@ -9,8 +9,8 @@ function cancelThis(){
 }
 
 function downloadFile(){
-    var fileName = "PCF地址省份归属库导入模板.xls";
-    window.open("exportExcel.jsp?path=/slview/apache/htdocs/nos/cust/"+fileName.trim(),"exportwin");
+    var fileName = "User.xlsx";
+    window.open("/oper/downModel?fileName=导入.xlsx");
 }
 
 function loading(value){

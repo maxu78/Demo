@@ -140,6 +140,7 @@ public class DataBaseServiceImpl implements DataBaseService{
                 cell.setCellValue(l.get(j));
             }
         }
+        FileUtil.judgeDirExists(FileUtil.getFilePath(outPath));
         File file = new File(outPath);
         // 创建文件流
         OutputStream stream = new FileOutputStream(outPath);
